@@ -10,11 +10,11 @@ export default class responseApi {
     data?: string
   ) {
     res.status(statusCode).json({
-      data: {
+      meta: {
         statusCode,
-        data,
         message,
       },
+      data: data,
     });
   }
 }

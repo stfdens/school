@@ -1,5 +1,6 @@
 import Express, { Request, Response } from "express";
 import muridController from "../controller/MuridController";
+import AuththenticationsController from "../controller/AuthenticationController";
 
 export const routesServer = (): void => {
   const app = Express();
@@ -23,6 +24,14 @@ export const routesServer = (): void => {
 
   app.delete("/murid/:id", (req: Request, res: Response): void =>
     muridController.deleteMurid(req, res)
+  );
+
+  // register && authentications
+  app.post("/register", (req: Request, res: Response): void =>
+    AuththenticationsController.register(req, res)
+  );
+  app.post("/login", (req: Request, res: Response): void =>
+    AuththenticationsController.login(req, res)
   );
 
   app.listen(process.env.PORT, (): void => {
