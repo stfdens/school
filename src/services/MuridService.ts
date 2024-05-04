@@ -1,12 +1,15 @@
-import { Response } from "express";
+import { Response, Request } from "express";
 import { connection } from "../config/Database_Config";
 import responseApi from "../config/Response";
+import { RequestAll } from "../interface/interfaceAllData";
 
 export default class MuridService {
   constructor() {}
 
-  static getAllMurid(res: Response): void {
+  static getAllMurid(req: RequestAll, res: Response): void {
     try {
+      console.log(req.token);
+
       const sql: string = `SELECT * FROM murid`;
       connection.query(sql, (err, result): void => {
         if (err) {

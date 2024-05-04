@@ -7,7 +7,7 @@ export default class responseApi {
     res: Response,
     statusCode: number,
     message: string,
-    data?: string
+    data?: string | object
   ) {
     res.status(statusCode).json({
       meta: {

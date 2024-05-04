@@ -61,11 +61,11 @@ export default class AuththenticationsService {
           return responseApi.ResponseData(res, 500, "FAILED", "SERVER ERROR");
         }
 
-        const data: Account = result[0];
-
         if (!result) {
           return responseApi.ResponseData(res, 404, "FAILED", "DATA TIDAK ADA");
         }
+
+        const data: Account = result[0];
 
         bcrypt.compare(
           password,
@@ -83,10 +83,19 @@ export default class AuththenticationsService {
             if (result) {
               const token = jwt.sign(
                 { Id: data.id, Username: data.username, Role: data.role },
-                `${process.env.SECRET_KEY}`
+                `${process.env.SECRET_KEY}`,
+                { expiresIn: "1h" }
               );
               responseApi.ResponseData(res, 200, "SUCCESS", token);
+              return;
             }
+
+            responseApi.ResponseData(
+              res,
+              400,
+              "FAILED",
+              "MASUKAN PW YANG BENAR"
+            );
           }
         );
       });

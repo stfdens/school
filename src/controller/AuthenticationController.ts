@@ -1,12 +1,6 @@
 import { Request, Response } from "express";
 import AuththenticationsService from "../services/AuthenticationService";
-import responseApi from "../config/Response";
-
-interface Account {
-  username?: string;
-  email?: string;
-  password?: string;
-}
+import { Account } from "../interface/interfaceAllData";
 
 export default class AuththenticationsController {
   constructor() {}
