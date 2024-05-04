@@ -23,13 +23,19 @@ export interface Role {
 }
 
 export interface UserAccount {
-  id: string;
-  username: string;
-  role: string;
+  id?: string;
+  username?: string;
+  role?: string;
+}
+
+// nyimpen data dari jwtpayload
+export interface CustomJwtPayload extends JwtPayload {
+  Id?: string;
+  Username?: string;
+  Role?: string;
 }
 
 export interface RequestAll extends Request {
   murid?: Murid;
-  token?: string | JwtPayload;
   user?: UserAccount;
 }

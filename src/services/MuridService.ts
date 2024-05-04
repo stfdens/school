@@ -8,8 +8,6 @@ export default class MuridService {
 
   static getAllMurid(req: RequestAll, res: Response): void {
     try {
-      console.log(req.token);
-
       const sql: string = `SELECT * FROM murid`;
       connection.query(sql, (err, result): void => {
         if (err) {

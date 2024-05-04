@@ -1,28 +1,38 @@
-import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { NextFunction, Response } from "express";
+import jwt from "jsonwebtoken";
+import {
+  CustomJwtPayload,
+  RequestAll,
+  UserAccount,
+} from "../interface/interfaceAllData";
 import responseApi from "../config/Response";
-import { RequestAll, UserAccount } from "../interface/interfaceAllData";
 
 export const jwtMiddleware = (
   req: RequestAll,
   res: Response,
   next: NextFunction
 ): void => {
-  const token = req.headers?.authorization?.split(" ")[1];
+  try {
+    const token: string = req.headers?.authorization?.split(" ")[1] as string;
 
-  jwt.verify(
-    token as string,
-    `${process.env.SECRET_KEY}`,
-    (error, result): void => {
-      if (error) {
-        return responseApi.ResponseData(res, 500, "FAILED", "INVALID TOKENS");
-      }
-
-      if (!result) {
-        return responseApi.ResponseData(res, 500, "INVALID TOKEN");
-      }
-
-      next();
+    if (!token) {
+      return responseApi.ResponseData(res, 401, "FAILED", "NOT HAVE TOKEN");
     }
-  );
+
+    const decodeToken = jwt.verify(
+      token,
+      process.env.SECRET_KEY as string
+    ) as CustomJwtPayload;
+
+    const user: UserAccount = {
+      id: decodeToken.Id,
+      username: decodeToken.Username,
+      role: decodeToken.Role,
+    };
+
+    req.user = user;
+    next();
+  } catch (error) {
+    return responseApi.ResponseData(res, 401, "FAILED", "INVALID TOKEN");
+  }
 };

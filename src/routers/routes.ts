@@ -4,14 +4,19 @@ import AuththenticationsController from "../controller/AuthenticationController"
 import { validationsRequest } from "../validations/validationSchema";
 import { jwtMiddleware } from "../middleware/jwtMiddleware";
 import { RequestAll } from "../interface/interfaceAllData";
+import { checkRolesAccount } from "../middleware/checkRole";
 
 export const routesServer = (): void => {
   const app = Express();
   app.use(Express.json());
 
   // admin area
-  app.get("/murid", jwtMiddleware, (req: RequestAll, res: Response): void =>
-    muridController.getAllMurid(req, res)
+  app.get(
+    "/murid",
+    jwtMiddleware,
+    checkRolesAccount,
+    (req: RequestAll, res: Response): void =>
+      muridController.getAllMurid(req, res)
   );
   app.get("/murid/:nama", jwtMiddleware, (req: Request, res: Response): void =>
     muridController.getMuridByName(req, res)
@@ -19,19 +24,21 @@ export const routesServer = (): void => {
   app.post(
     "/murid",
     jwtMiddleware,
+    checkRolesAccount,
     validationsRequest,
     (req: Request, res: Response): void => muridController.postMurid(req, res)
   );
   app.put(
     "/murid/:id",
     jwtMiddleware,
+    checkRolesAccount,
     validationsRequest,
     (req: Request, res: Response): void => muridController.updateMurid(req, res)
   );
   app.delete(
     "/murid/:id",
     jwtMiddleware,
-    validationsRequest,
+    checkRolesAccount,
     (req: Request, res: Response): void => muridController.deleteMurid(req, res)
   );
 
